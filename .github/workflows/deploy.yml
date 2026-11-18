@@ -39,24 +39,29 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 \
-            -p 22 \
-            "$VPS_USERNAME@$VPS_HOST" << 'EOF'
+          set -e
 
+          # Verificar variables
+          if [ -z "$VPS_HOST" ] || [ -z "$VPS_USERNAME" ]; then
+            echo "Error: VPS_HOST o VPS_USERNAME estan vacios"
+            exit 1
+          fi
+
+          echo "Conectando al VPS..."
+
+          ssh -i "$HOME/.ssh/id_ed25519" -p 22 "$VPS_USERNAME@$VPS_HOST" <<'EOF'
             set -e
 
-            # Directorio del proyecto en el VPS
             cd /home/miguel/locoreria-eden
 
             echo "Actualizando repositorio..."
             git pull origin master
 
-            echo "Construyendo y desplegando contenedor..."
+            echo "Construyendo contenedor..."
             docker compose up -d --build
 
-            echo "Verificando contenedor..."
+            echo "Verificando despliegue..."
             docker compose ps
 
             echo "Despliegue completado correctamente."
-
           EOF
