@@ -40,10 +40,9 @@ jobs:
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
         run: |
           ssh -i ~/.ssh/id_ed25519 \
-            -p "$VPS_PORT" \
+            -p 22 \
             "$VPS_USERNAME@$VPS_HOST" << 'EOF'
 
             set -e
