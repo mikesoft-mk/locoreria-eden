@@ -7,11 +7,9 @@ on:
 
   workflow_dispatch:
 
-# Permisos mínimos necesarios
 permissions:
   contents: read
 
-# Evita despliegues simultáneos
 concurrency:
   group: production-deploy
   cancel-in-progress: false
@@ -47,7 +45,8 @@ jobs:
 
             set -e
 
-            cd /home/miguel/proyectos/mi-pagina-web
+            # Directorio del proyecto en el VPS
+            cd /home/miguel/locoreria-eden
 
             echo "Actualizando repositorio..."
             git pull origin master
